@@ -8,11 +8,6 @@ jobs:
       - name: Install npm dependencies
         run: |
           npm install
-  build-android:
-    needs: install-dependencies
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
       - name: Build Android App
         working-directory: ./android
         run: bash ./gradlew assembleDebug --stacktrace

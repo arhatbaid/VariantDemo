@@ -4,7 +4,6 @@ on: push
 
 jobs:
   install-dependencies:
-    needs: install
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -12,6 +11,7 @@ jobs:
         run: |
           npm install
   build-android:
+    needs: install-dependencies
     runs-on: macos-latest
     defaults:
       run:

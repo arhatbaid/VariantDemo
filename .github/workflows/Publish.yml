@@ -1,10 +1,8 @@
 name: Build Debug Android Apps
-
 on: push
-
 jobs:
   install-dependencies:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Install npm dependencies
@@ -13,18 +11,16 @@ jobs:
   build-android:
     needs: install-dependencies
     runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: ./android
     steps:
+      - uses: actions/checkout@v2
       - name: Build Android App
-        run: |
-          ./gradlew assembleDebug --stacktrace
+        working-directory: ./android
+        run: bash ./gradlew assembleDebug --stacktrace
       - name: Check file existence
         id: check_files
         uses: andstor/file-existence-action@v1
         with:
-          files: "android/app/build/outputs/apk/debug/app-debug.apk"
+          files: "app/build/outputs/apk/debug/app-debug.apk"
       - name: File exists
         if: steps.check_files.outputs.files_exists == 'true'
         run: echo All files exists!

@@ -15,7 +15,7 @@ jobs:
     runs-on: macos-latest
     defaults:
       run:
-        working-directory: android
+        working-directory: ./android
     steps:
       - name: Build Android App
         run: |

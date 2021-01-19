@@ -1,0 +1,21 @@
+name: Build Debug Android Apps
+on: push
+jobs:
+  build-ios:
+    needs: run-eslint
+    runs-on: [ self-hosted, macos ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install pod dependencies
+        run: |
+          cd ios && pod install
+      - name: Build app
+        run: |
+          xcodebuild -workspace VaraintDemo.xcworkspace -scheme VaraintDemo archive -archivePath VaraintDemo.xcarchive -allowProvisioningUpdates
+          xcodebuild -exportArchive -archivePath ./VaraintDemo.xcarchive -exportPath . -exportOptionsPlist VaraintDemo/Info.plist
+          mv VaraintDemo.ipa ../VaraintDemo.ipa
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: VaraintDemo.ipa
+          path: ios/build/

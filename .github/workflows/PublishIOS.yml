@@ -1,8 +1,8 @@
-name: Build Debug Android Apps
+name: Build Debug IOS Apps
 on: push
 jobs:
   build-ios:
-    runs-on: [ self-hosted, macos ]
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - name: Install pod dependencies

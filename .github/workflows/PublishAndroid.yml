@@ -3,6 +3,7 @@ on: push
 jobs:
   build-android:
     runs-on: ubuntu-latest
+    allow-failure: true
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14.x

@@ -2,7 +2,6 @@ name: Build Debug Android Apps
 on: push
 jobs:
   build-ios:
-    needs: run-eslint
     runs-on: [ self-hosted, macos ]
     steps:
       - uses: actions/checkout@v2

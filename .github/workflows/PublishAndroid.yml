@@ -17,7 +17,7 @@ jobs:
           java-version: 1.8
       - name: Build Android App
         working-directory: ./android
-        run: bash ./gradlew assembleDebug --stacktrace
+        run: bash yarn android
       - name: Upload Debug APK
         uses: actions/upload-artifact@v2
         with:

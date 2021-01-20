@@ -21,7 +21,6 @@ jobs:
           key: cache-clean-gradle-${{ matrix.os }}-${{ matrix.jdk }}
 
       - name: Cache Gradle Wrapper
-        working-directory: ./android
         uses: actions/cache@v2
         with:
           path: ~/.gradle/wrapper/

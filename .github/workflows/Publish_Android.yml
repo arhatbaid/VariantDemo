@@ -20,8 +20,8 @@ jobs:
           npm install
 
       - name: Install Fastlane
-        run: gem install fastlane
+        run: cd android && gem install fastlane
 
       - name: Distribute app to Beta Track 🚀
         run: |
-          cd android && bundle exec fastlane beta
+          bundle exec fastlane beta

@@ -24,4 +24,4 @@ jobs:
 
       - name: Distribute app to Beta Track 🚀
         run: |
-          bundle exec fastlane beta
+          cd android && bundle exec fastlane beta

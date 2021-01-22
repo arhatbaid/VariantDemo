@@ -27,6 +27,8 @@ DerivedData
 .gradle
 local.properties
 *.iml
+vendor/
+.bundle
 
 # node.js
 #

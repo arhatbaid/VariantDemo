@@ -13,12 +13,15 @@ jobs:
         with:
           ruby-version: '2.6'
 
-      - name: Setup Node v12
-        uses: actions/setup-node@v1
+      - name: Setup actions/setup-node@v1 v12
+        uses: actions/setup-node@v2
         with:
           node-version: '12'
 
       - run: yarn install
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
 
       - name: Install Fastlane
         run: sudo gem install fastlane -NV

@@ -20,7 +20,7 @@ jobs:
           npm install
 
       - name: Install Fastlane
-        run: cd android && gem install fastlane && fastlane init
+        run: bundle install
 
       - name: Check file existence
         id: check_files

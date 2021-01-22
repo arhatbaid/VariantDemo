@@ -7,37 +7,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-
+        -
+      - name: Set up Ruby v2.6
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '2.6'
 
-      - name: Cache Ruby - Bundler
-        uses: actions/cache@v2
+      - name: Setup Node v12
+        uses: actions/setup-node@v1
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: Cache Gradle
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches/
-          key: cache-clean-gradle-${{ matrix.os }}-${{ matrix.jdk }}
+          node-version: '12'
+      - run: yarn install
 
-      - name: Cache Gradle Wrapper
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/wrapper/
-          key: cache-clean-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
 
-      - name: Grant Permission to Execute
-        run: cd android && chmod +x gradlew
+      - name: Install Fastlane
+        run: sudo gem install fastlane -NV
 
-      - name: Install bundle
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3 && bundle init
+      - name: Install Bundler
+        run: gem install bundler
 #      - name: Configure Keystore
 #        run: |
 #          echo "$ANDROID_KEYSTORE_FILE" > keystore.jks.b64
@@ -60,4 +47,4 @@ jobs:
 #          PLAY_CONFIG_JSON: ${{ secrets.PLAY_CONFIG_JSON }}
 
       - name: Distribute app to Beta track 🚀
-        run: bundle exec fastlane beta
+        run: cd andrid && bundle exec fastlane beta

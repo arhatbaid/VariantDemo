@@ -18,8 +18,20 @@ jobs:
         with:
           node-version: '12'
 
-      - name: Install Bundler and Fastlane
-        run: cd android && gem install bundler && bundle init && bundle config path vendor/bundle && bundle install && bundle add fastlane
+      - name: Install Fastlane
+        run: sudo gem install fastlane -NV
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Fastlane Beta
+          run: |
+            cd android
+            bundle install
+            cd ../
+
+#      - name: Install Bundler and Fastlane
+#        run: cd android && gem install bundler && bundle init && bundle config path vendor/bundle && bundle install && bundle add fastlane
 
 
 #      - name: Configure Keystore
@@ -44,4 +56,4 @@ jobs:
 #          PLAY_CONFIG_JSON: ${{ secrets.PLAY_CONFIG_JSON }}
 
       - name: Distribute app to Beta track 🚀
-        run: bundle exec fastlane beta
+        run: cd android && bundle exec fastlane beta

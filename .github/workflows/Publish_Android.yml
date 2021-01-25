@@ -19,7 +19,7 @@ jobs:
           node-version: '12'
 
       - name: Install Bundler and Fastlane
-        run: cd ./android && gem install bundler && bundle init && bundle add fastlane
+        run: cd ./android && gem install bundler && bundle init &&  bundle install --path vendor/bundle && bundle add fastlane
 
 #      - name: Configure Keystore
 #        run: |

@@ -1,0 +1,2 @@
+json_key_file("/Users/abaid/WebstormProjects/VariantDemo/android/app") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.variantdemo") # e.g. com.krausefx.app

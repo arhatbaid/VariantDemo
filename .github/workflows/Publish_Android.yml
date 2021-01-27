@@ -55,7 +55,7 @@ jobs:
         # Build Command
       - name: Build Android Release
         run: |
-          cd android && ./gradlew assembleRelease --no-daemon
+          cd android && ./gradlew bundleRelease --no-daemon
 
 #      - name: Sign App Bundle
 #        id: sign_app
@@ -77,7 +77,7 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.variantdemo
-          releaseFile: app/build/outputs/bundle/release/app-release.aab
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: beta
 
 

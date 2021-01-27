@@ -30,8 +30,6 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-        run: |
-          npm install
 
       - name: Cache Gradle Wrapper
         uses: actions/cache@v2

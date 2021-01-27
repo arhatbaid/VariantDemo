@@ -1,64 +1,57 @@
-name: Build & Publish Android Apps
+name: "React Native Android Build APK"
+description: "This github action automatically builds the android apk under the artifact section"
+author: "realabbas"
+branding:
+  icon: "archive"
+  color: "blue"
 on: push
 
 jobs:
-  deploy:
+  # First Job
+  install-and-test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: set up JDK 1.8
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.8
-
-      - name: Setup actions/setup-node@v1
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14.15.3'
-
-      - uses: actions/checkout@v2
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '>= 2.6'
-
       - uses: actions/checkout@v2
       - name: Install npm dependencies
         run: |
           npm install
-
-      - name: Grant rights
-        run: cd android && chmod +x build.gradle
-
-      - name: Build with Gradle
-        id: build
-        run: ./gradlew build
-
-      - name: Build Release AAB
-        id: buildRelease
-        run: ./gradlew bundleRelease
-
-#      - name: Sign App Bundle
-#        id: sign_app
-#        uses: r0adkll/sign-android-release@v1
-#        with:
-#          releaseDirectory: android/app/build/outputs/bundle/release
-#          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
-#          alias: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
-#          keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
-#          keyPassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
-#
-#      - name: Create Google store key.json
-#        id: createServiceAccount
-#        run: echo '${{ secrets.GOOGLE_STORE_KEY_JSON }}' > key.json
-
-      - name: Deploy to Play Store (BETA)
-        id: deploy
-        uses: r0adkll/upload-google-play@v1
+      # For testing
+      - name: Run tests
+        run: |
+          npm test
+  # Second Job
+  build-android:
+    needs: install-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          npm install
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v2
         with:
-          releaseFile: app/build/outputs/bundle/release/app-release.aab
-          track: deploy
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-caches-
+      - name: Make Gradlew Executable
+        run: cd android && chmod +x ./gradlew
+        # Build Command
 
+      - name: Build Android Release
+        run: |
+          cd android && gradlew assembleRelease --no-daemon
+
+      # Upload to Artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: app-release.apk
+          path: android/app/build/outputs/apk/release/

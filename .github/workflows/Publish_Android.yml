@@ -53,10 +53,10 @@ jobs:
 #        run: cd android && chmod +x ./gradlew
 
       - name: Configure Keystore
-          run: |
-            cd android
-            echo "ANDROID_KEYSTORE_FILE" > keystore.jks.b64
-            base64 -d -i keystore.jks.b64 > app/driver-app.keystore
+        run: |
+          cd android
+          echo "ANDROID_KEYSTORE_FILE" > keystore.jks.b64
+          base64 -d -i keystore.jks.b64 > app/driver-app.keystore
 
         # Build Command
 #      - name: Build Android Release

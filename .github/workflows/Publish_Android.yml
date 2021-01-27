@@ -23,13 +23,14 @@ jobs:
         with:
           ruby-version: '>= 2.6'
 
-      - name: Install npm dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+#      Need to figure out the caching
+#      - name: Install npm dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.npm
+#          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+#          restore-keys: |
+#            ${{ runner.os }}-node-
 
       - name: Install Dependencies
         run: npm install
@@ -55,6 +56,30 @@ jobs:
       - name: Build Android Release
         run: |
           cd android && ./gradlew assembleRelease --no-daemon
+
+#      - name: Sign App Bundle
+#        id: sign_app
+#        uses: r0adkll/sign-android-release@v1
+#        with:
+#          releaseDirectory: android/app/build/outputs/bundle/release
+#          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+#          alias: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
+#          keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+#          keyPassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+
+#      - name: Create Google store key
+#        id: createServiceAccount
+#        run: echo '${{ secrets.GOOGLE_STORE_KEY_JSON_BASE64 }}' > key.json
+
+      - name: Deploy to Play Store (BETA)
+        id: deploy
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.variantdemo
+          releaseFile: app/build/outputs/bundle/release/app-release.aab
+          track: beta
+
 
 #      # Upload to Artifact
 #      - name: Upload Artifact

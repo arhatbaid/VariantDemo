@@ -6,41 +6,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Setup actions/setup-node@v1
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - uses: actions/checkout@v2
       - uses: actions/setup-ruby@v1
         with:
-          ruby-version: '2.6'
+          ruby-version: '>= 2.6'
 
-      - name: Cache Ruby - Bundler
-        uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-      - name: Cache Gradle
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches/
-          key: cache-clean-gradle-${{ matrix.os }}-${{ matrix.jdk }}
+      - name: Install yarn
+        run: yarn install
 
-      - name: Cache Gradle Wrapper
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/wrapper/
-          key: cache-clean-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
+      - name: Install Fastlane
+        run: sudo gem install fastlane -NV
 
-      - name: Grant Permission to Execute
-        run: cd android && chmod +x gradlew
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: INSTALL Fastlane
+        run: |
+          cd android
+          bundle install
+
+      - name: Grant rights
+        run: chmod +x build.gradle
 
       - name: Build with Gradle
-        id: build
-        run: cd android && ./gradlew build
+        run: ./gradlew build
 
       - name: Build Release AAB
-        id: bundleDebug
-        run: cd android && ./gradlew bundleDebug
+        run: ./gradlew bundleDebug
 
 #      - name: Sign App Bundle
 #        id: sign_app
@@ -51,7 +56,7 @@ jobs:
 #          alias: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
 #          keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
 #          keyPassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
-#
+
 #      - name: Create Google store key.json
 #        id: createServiceAccount
 #        run: echo '${{ secrets.GOOGLE_STORE_KEY_JSON }}' > key.json
@@ -60,9 +65,8 @@ jobs:
         id: deploy
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJson: service_account.json
           packageName: com.package
-          releaseFile: app/build/outputs/bundle/release/app-release.aab
-          track: beta
-          whatsNewDirectory: whatsnew/
+          releaseFile: app/build/outputs/bundle/debug/app-debug.aab
+          track: deploy
+
 

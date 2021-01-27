@@ -39,7 +39,7 @@ jobs:
 #          bundle install
 
       - name: Grant rights
-        run: chmod +x build.gradle
+        run: cd android && chmod +x build.gradle
 
       - name: Build with Gradle
         run: ./gradlew build

@@ -31,6 +31,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Install Dependencies
+            run: npm install
+
       - name: Cache Gradle Wrapper
         uses: actions/cache@v2
         with:

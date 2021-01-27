@@ -6,43 +6,55 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Setup actions/setup-node@v1 v12
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Setup actions/setup-node@v1
         uses: actions/setup-node@v2
         with:
-          node-version: '12'
+          node-version: '14'
 
       - uses: actions/checkout@v2
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '>= 2.6'
-      - uses: maierj/fastlane-action@v2.0.0
+
+      - name: Grant rights
+        run: chmod +x build.gradle
+
+      - name: Build with Gradle
+        id: build
+        run: ./gradlew build
+
+      - name: Build Release AAB
+        id: buildRelease
+        run: ./gradlew bundleDebug
+
+#      - name: Sign App Bundle
+#        id: sign_app
+#        uses: r0adkll/sign-android-release@v1
+#        with:
+#          releaseDirectory: android/app/build/outputs/bundle/release
+#          signingKeyBase64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+#          alias: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
+#          keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+#          keyPassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+
+#      - name: Create Google store key.json
+#        id: createServiceAccount
+#        run: echo '${{ secrets.GOOGLE_STORE_KEY_JSON }}' > key.json
+
+      - name: Deploy to Play Store (BETA)
+        id: deploy
+        uses: r0adkll/upload-google-play@v1
         with:
-          lane: 'beta'
-          subdirectory: 'android'
-#      - name: Install Bundler and Fastlane
-#        run: cd android && gem install bundler && bundle init && bundle config path vendor/bundle && bundle install && bundle add fastlane
+          packageName: com.package
+          releaseFile: app/build/outputs/bundle/debug/app-debug.aab
+          track: deploy
 
 
-#      - name: Configure Keystore
-#        run: |
-#          echo "$ANDROID_KEYSTORE_FILE" > keystore.jks.b64
-#          base64 -d -i keystore.jks.b64 > app/keystore.jks
-#          echo "storeFile=keystore.jks" >> keystore.properties
-#          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> keystore.properties
-#          echo "storePassword=$KEYSTORE_STORE_PASSWORD" >> keystore.properties
-#          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> keystore.properties
-#        env:
-#          ANDROID_KEYSTORE_FILE: ${{ secrets.ANDROID_KEYSTORE_FILE }}
-#          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
-#          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
-#          KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_STORE_PASSWORD }}
-#
-#      - name: Create Google Play Config file
-#        run : |
-#          echo "$PLAY_CONFIG_JSON" > play_config.json.b64
-#          base64 -d -i play_config.json.b64 > play_config.json
-#        env:
-#          PLAY_CONFIG_JSON: ${{ secrets.PLAY_CONFIG_JSON }}
-
-#      - name: Distribute app to Beta track 🚀
-#        run: cd android &&

@@ -15,14 +15,10 @@
 
 default_platform(:android)
 
-default_platform(:android)
-
 platform :android do
 
-  desc "Deploy a beta version to the Google Play"
-    lane :beta do
-        gradle(task: "clean bundleDebug")
-        upload_to_play_store(track: 'internal', release_status: 'draft')
-        slack(message: 'Successfully uploaded a new beta build as a draft')
-    end
+desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "bundleRelease")
+  end
 end

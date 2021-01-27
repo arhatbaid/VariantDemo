@@ -17,35 +17,28 @@ jobs:
       - name: Setup actions/setup-node@v1
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '14.15.3'
 
       - uses: actions/checkout@v2
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: '>= 2.6'
 
-      - name: Install yarn
-        run: yarn install
-
-#      - name: Install Fastlane
-#        run: sudo gem install fastlane -NV
-#
-#      - name: Install Bundler
-#        run: gem install bundler
-#
-#      - name: INSTALL Fastlane
-#        run: |
-#          cd android
-#          bundle install
+      - uses: actions/checkout@v2
+      - name: Install npm dependencies
+        run: |
+          npm install
 
       - name: Grant rights
         run: cd android && chmod +x build.gradle
 
       - name: Build with Gradle
+        id: build
         run: ./gradlew build
 
       - name: Build Release AAB
-        run: ./gradlew bundleDebug
+        id: buildRelease
+        run: ./gradlew bundleRelease
 
 #      - name: Sign App Bundle
 #        id: sign_app
@@ -56,7 +49,7 @@ jobs:
 #          alias: ${{ secrets.RELEASE_KEYSTORE_ALIAS }}
 #          keyStorePassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
 #          keyPassword: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
-
+#
 #      - name: Create Google store key.json
 #        id: createServiceAccount
 #        run: echo '${{ secrets.GOOGLE_STORE_KEY_JSON }}' > key.json
@@ -65,8 +58,7 @@ jobs:
         id: deploy
         uses: r0adkll/upload-google-play@v1
         with:
-          packageName: com.package
-          releaseFile: app/build/outputs/bundle/debug/app-debug.aab
+          releaseFile: app/build/outputs/bundle/release/app-release.aab
           track: deploy
 
 

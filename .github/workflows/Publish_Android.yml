@@ -27,16 +27,16 @@ jobs:
       - name: Install yarn
         run: yarn install
 
-      - name: Install Fastlane
-        run: sudo gem install fastlane -NV
-
-      - name: Install Bundler
-        run: gem install bundler
-
-      - name: INSTALL Fastlane
-        run: |
-          cd android
-          bundle install
+#      - name: Install Fastlane
+#        run: sudo gem install fastlane -NV
+#
+#      - name: Install Bundler
+#        run: gem install bundler
+#
+#      - name: INSTALL Fastlane
+#        run: |
+#          cd android
+#          bundle install
 
       - name: Grant rights
         run: chmod +x build.gradle

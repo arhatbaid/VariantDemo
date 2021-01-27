@@ -36,11 +36,11 @@ jobs:
 
       - name: Build with Gradle
         id: build
-        run: ./gradlew build
+        run: cd android && ./gradlew build
 
       - name: Build Release AAB
         id: bundleDebug
-        run: ./gradlew bundleDebug
+        run: cd android && ./gradlew bundleDebug
 
 #      - name: Sign App Bundle
 #        id: sign_app

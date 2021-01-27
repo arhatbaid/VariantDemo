@@ -24,15 +24,13 @@ jobs:
         with:
           ruby-version: '>= 2.6'
 
-      - name: Grant rights
-        run: cd android && chmod +x build.gradle
+#      - name: Grant rights
+#        run: cd android && chmod +x build.gradle
 
       - name: Build with Gradle
-        id: build
-        run: ./gradlew build
+        run: cd android && ./gradlew build
 
       - name: Build Release AAB
-        id: buildRelease
         run: ./gradlew bundleDebug
 
 #      - name: Sign App Bundle

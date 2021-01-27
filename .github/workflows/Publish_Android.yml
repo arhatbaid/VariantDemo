@@ -32,54 +32,60 @@ jobs:
 #          restore-keys: |
 #            ${{ runner.os }}-node-
 
-      - name: Install Dependencies
-        run: npm install
+#      - name: Install Dependencies
+#        run: npm install
+#
+#      - name: Cache Gradle Wrapper
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+#
+#      - name: Cache Gradle Dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.gradle/caches
+#          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-caches-
+#
+#      - name: Make Gradlew Executable
+#        run: cd android && chmod +x ./gradlew
 
-      - name: Cache Gradle Wrapper
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Cache Gradle Dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-caches-
-
-      - name: Make Gradlew Executable
-        run: cd android && chmod +x ./gradlew
+      - name: Configure Keystore
+          run: |
+            cd android
+            echo "ANDROID_KEYSTORE_FILE" > keystore.jks.b64
+            base64 -d -i keystore.jks.b64 > app/driver-app.keystore
 
         # Build Command
 #      - name: Build Android Release
 #        run: |
-#          cd android && ./gradlew bundleRelease --no-daemon
-
-      - name: Sign App Bundle
-        id: sign_app
-        uses: r0adkll/sign-android-release@v1
-        with:
-          releaseDirectory: android/app/build/outputs/bundle/release
-          signingKeyBase64: openssl base64 < android/app/debug.keystore | tr -d '\n' | tee debug.keystore.base64.txt
-          alias: 'androiddebugkey'
-          keyStorePassword: 'android'
-          keyPassword: 'android'
+#          cd android && ./gradlew a --no-daemon
+#
+#      - name: Sign App Bundle
+#        id: sign_app
+#        uses: r0adkll/sign-android-release@v1
+#        with:
+#          releaseDirectory: android/app/build/outputs/bundle/release
+#          signingKeyBase64: openssl base64 < android/app/debug.keystore | tr -d '\n' | tee debug.keystore.base64.txt
+#          alias: 'androiddebugkey'
+#          keyStorePassword: 'android'
+#          keyPassword: 'android'
 
 #      - name: Create Google store key
 #        id: createServiceAccount
 #        run: echo '${{ secrets.GOOGLE_STORE_KEY_JSON_BASE64 }}' > key.json
 
 
-      - name: Deploy to Play Store (BETA)
-        id: deploy
-        uses: r0adkll/upload-google-play@v1
-        with:
-          serviceAccountJson: service_account.json
-          packageName: com.variantdemo
-          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
-          track: deploy
+#      - name: Deploy to Play Store (BETA)
+#        id: deploy
+#        uses: r0adkll/upload-google-play@v1
+#        with:
+#          serviceAccountJson: service_account.json
+#          packageName: com.variantdemo
+#          releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
+#          track: deploy
 
 
 #      # Upload to Artifact

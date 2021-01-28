@@ -16,6 +16,16 @@ or alternatively using `brew install fastlane`
 
 # Available Actions
 ## Android
+### android IncrementBuildNumber
+```
+fastlane android IncrementBuildNumber
+```
+
+### android gitpush
+```
+fastlane android gitpush
+```
+
 ### android deploy
 ```
 fastlane android deploy

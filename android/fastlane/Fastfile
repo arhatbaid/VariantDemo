@@ -33,8 +33,6 @@ lane :gitpush do
         git_add
         git_commit(path: "*", message: "Version")
         push_to_git_remote
-
-
 end
 
 desc "Deploy a new version to the Google Play"

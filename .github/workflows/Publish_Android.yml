@@ -26,15 +26,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-#      Need to figure out the caching
-#      - name: Install npm dependencies
-#        uses: actions/cache@v2
-#        with:
-#          path: ~/.npm
-#          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-#          restore-keys: |
-#            ${{ runner.os }}-node-
-
       - name: Install bundle
         run: cd android && gem install bundler && bundle install
 

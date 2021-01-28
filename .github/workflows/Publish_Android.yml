@@ -25,9 +25,6 @@ jobs:
         with:
           ruby-version: '2.7'
 
-      - name: Install Fastlane
-        run: bundle install
-
 #      Need to figure out the caching
 #      - name: Install npm dependencies
 #        uses: actions/cache@v2

@@ -32,6 +32,7 @@ jobs:
 #          restore-keys: |
 #            ${{ runner.os }}-node-
 
+      - uses: actions/checkout@v2
       - name: Install Dependencies
         run: npm install
 

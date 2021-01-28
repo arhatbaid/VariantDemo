@@ -40,7 +40,7 @@ jobs:
 
       - name: Bundle and Upload to PlayStore
         run: |
-          bundle exec fastlane deploy
+          fastlane deploy
 #
 #      - name: Cache Gradle Wrapper
 #        uses: actions/cache@v2

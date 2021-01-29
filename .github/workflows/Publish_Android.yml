@@ -1,6 +1,10 @@
 name: "React Native Android Build APK"
 
-#on: push
+
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build-android:
